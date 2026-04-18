@@ -11,9 +11,9 @@ from mcerp import *
 Construct uncertain variables from probability distributions:
 
 ```python
-x1 = N(24, 1)   # normal distribution: mean 24, standard deviation 1
-x2 = N(37, 4)   # normal distribution: mean 37, standard deviation 4
-x3 = Exp(2)     # exponential distribution: lambda 2
+x1 = N(24, 1)  # normal distribution: mean 24, standard deviation 1
+x2 = N(37, 4)  # normal distribution: mean 37, standard deviation 4
+x3 = Exp(2)  # exponential distribution: lambda 2
 ```
 
 The first four moments are available as properties:
@@ -227,11 +227,7 @@ plotcorr([x1, x2, x3], labels=["x1", "x2", "x3"], show=True)
 Now impose a target correlation matrix:
 
 ```python
-c = np.array([
-    [1.0, -0.75, 0.0],
-    [-0.75, 1.0, 0.0],
-    [0.0, 0.0, 1.0],
-])
+c = np.array([[1.0, -0.75, 0.0], [-0.75, 1.0, 0.0], [0.0, 0.0, 1.0]])
 
 correlate([x1, x2, x3], c)
 correlation_matrix([x1, x2, x3])

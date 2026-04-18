@@ -2,8 +2,8 @@
 
 ![MCERP](./_static/logo.png)
 
-Real-time latin-hypercube-sampling-based Monte Carlo error propagation for
-Python.
+**Real-time latin-hypercube-sampling-based Monte Carlo error propagation for
+Python.**
 
 `mcerp` is a stochastic calculator for uncertainty analysis. It represents
 inputs as probability distributions, samples them with Latin hypercube

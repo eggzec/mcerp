@@ -1,4 +1,6 @@
-# ``mcerp`` Real-time latin-hypercube sampling-based Monte Carlo ERror Propagation for Python
+# mcerp
+
+**Real-time latin-hypercube sampling-based Monte Carlo ERror Propagation for Python**
 
 [![Tests](https://github.com/eggzec/mcerp/actions/workflows/code_test.yml/badge.svg)](https://github.com/eggzec/mcerp/actions/workflows/code_test.yml)
 [![Documentation](https://github.com/eggzec/mcerp/actions/workflows/docs_build.yml/badge.svg)](https://github.com/eggzec/mcerp/actions/workflows/docs_build.yml)
