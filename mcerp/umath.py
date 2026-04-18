@@ -9,8 +9,11 @@ module or numpy) compatible with objects with uncertainty distributions
 Author: Abraham Lee
 Copyright: 2013
 """
-from mcerp import UncertainFunction, to_uncertain_func
+
 import numpy as np
+
+from mcerp import UncertainFunction, to_uncertain_func
+
 
 __author__ = "Abraham Lee"
 

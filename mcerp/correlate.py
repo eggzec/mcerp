@@ -1,27 +1,29 @@
 import itertools
+
 import numpy as np
 from scipy.stats import rankdata
 from scipy.stats.distributions import norm
+
 from . import UncertainFunction
 
 
-def correlate(params, corrmat):
+def correlate(params, corrmat) -> None:
     """
     Force a correlation matrix on a set of statistically distributed objects.
     This function works on objects in-place.
-    
+
     Parameters
     ----------
     params : array
         An array of of uv objects.
     corrmat : 2d-array
         The correlation matrix to be imposed
-    
+
     """
     # Make sure all inputs are compatible
-    assert all(
-        [isinstance(param, UncertainFunction) for param in params]
-    ), 'All inputs to "correlate" must be of type "UncertainFunction"'
+    assert all([isinstance(param, UncertainFunction) for param in params]), (
+        'All inputs to "correlate" must be of type "UncertainFunction"'
+    )
 
     # Put each ufunc's samples in a column-wise matrix
     data = np.vstack([param._mcpts for param in params]).T
@@ -37,7 +39,7 @@ def correlate(params, corrmat):
 def induce_correlations(data, corrmat):
     """
     Induce a set of correlations on a column-wise dataset
-    
+
     Parameters
     ----------
     data : 2d-array
@@ -48,12 +50,12 @@ def induce_correlations(data, corrmat):
         An n-by-n array that defines the desired correlation coefficients
         (between -1 and 1). Note: the matrix must be symmetric and
         positive-definite in order to induce.
-    
+
     Returns
     -------
     new_data : 2d-array
         An m-by-n array that has the desired correlations.
-        
+
     """
     # Create an rank-matrix
     data_rank = np.vstack([rankdata(datai) for datai in data.T]).T
@@ -84,8 +86,9 @@ def induce_correlations(data, corrmat):
 
     # Sort the original data according to new_data_rank
     for i in range(data.shape[1]):
-        vals, order = np.unique(
-            np.hstack((data_rank[:, i], new_data_rank[:, i])), return_inverse=True
+        _vals, order = np.unique(
+            np.hstack((data_rank[:, i], new_data_rank[:, i])),
+            return_inverse=True,
         )
         old_order = order[: new_data_rank.shape[0]]
         new_order = order[-new_data_rank.shape[0] :]
@@ -97,30 +100,30 @@ def induce_correlations(data, corrmat):
 
 def plotcorr(X, plotargs=None, full=True, labels=None):
     """
-    Plots a scatterplot matrix of subplots.  
-    
+    Plots a scatterplot matrix of subplots.
+
     Usage:
-    
+
         plotcorr(X)
-        
+
         plotcorr(..., plotargs=...)  # e.g., 'r*', 'bo', etc.
-        
+
         plotcorr(..., full=...)  # e.g., True or False
-        
+
         plotcorr(..., labels=...)  # e.g., ['label1', 'label2', ...]
 
     Each column of "X" is plotted against other columns, resulting in
-    a ncols by ncols grid of subplots with the diagonal subplots labeled 
+    a ncols by ncols grid of subplots with the diagonal subplots labeled
     with "labels".  "X" is an array of arrays (i.e., a 2d matrix), a 1d array
     of MCERP.UncertainFunction/Variable objects, or a mixture of the two.
-    Additional keyword arguments are passed on to matplotlib's "plot" command. 
+    Additional keyword arguments are passed on to matplotlib's "plot" command.
     Returns the matplotlib figure object containing the subplot grid.
     """
     import matplotlib.pyplot as plt
 
     X = [Xi._mcpts if isinstance(Xi, UncertainFunction) else Xi for Xi in X]
     X = np.atleast_2d(X)
-    numvars, numdata = X.shape
+    numvars, _numdata = X.shape
     fig, axes = plt.subplots(nrows=numvars, ncols=numvars, figsize=(8, 8))
     fig.subplots_adjust(hspace=0.0, wspace=0.0)
 
@@ -131,18 +134,18 @@ def plotcorr(X, plotargs=None, full=True, labels=None):
 
         # Set up ticks only on one side for the "edge" subplots...
         if full:
-            if ax.is_first_col():
+            if ax.get_subplotspec().is_first_col():
                 ax.yaxis.set_ticks_position("left")
-            if ax.is_last_col():
+            if ax.get_subplotspec().is_last_col():
                 ax.yaxis.set_ticks_position("right")
-            if ax.is_first_row():
+            if ax.get_subplotspec().is_first_row():
                 ax.xaxis.set_ticks_position("top")
-            if ax.is_last_row():
+            if ax.get_subplotspec().is_last_row():
                 ax.xaxis.set_ticks_position("bottom")
         else:
-            if ax.is_first_row():
+            if ax.get_subplotspec().is_first_row():
                 ax.xaxis.set_ticks_position("top")
-            if ax.is_last_col():
+            if ax.get_subplotspec().is_last_col():
                 ax.yaxis.set_ticks_position("right")
 
     # Label the diagonal subplots...
@@ -151,11 +154,15 @@ def plotcorr(X, plotargs=None, full=True, labels=None):
 
     for i, label in enumerate(labels):
         axes[i, i].annotate(
-            label, (0.5, 0.5), xycoords="axes fraction", ha="center", va="center"
+            label,
+            (0.5, 0.5),
+            xycoords="axes fraction",
+            ha="center",
+            va="center",
         )
 
     # Plot the data
-    for i, j in zip(*np.triu_indices_from(axes, k=1)):
+    for i, j in zip(*np.triu_indices_from(axes, k=1), strict=False):
         if full:
             idx = [(i, j), (j, i)]
         else:
@@ -171,10 +178,12 @@ def plotcorr(X, plotargs=None, full=True, labels=None):
             ylim = min(X[y]), max(X[y])
             xlim = min(X[x]), max(X[x])
             axes[x, y].set_ylim(
-                xlim[0] - (xlim[1] - xlim[0]) * 0.1, xlim[1] + (xlim[1] - xlim[0]) * 0.1
+                xlim[0] - (xlim[1] - xlim[0]) * 0.1,
+                xlim[1] + (xlim[1] - xlim[0]) * 0.1,
             )
             axes[x, y].set_xlim(
-                ylim[0] - (ylim[1] - ylim[0]) * 0.1, ylim[1] + (ylim[1] - ylim[0]) * 0.1
+                ylim[0] - (ylim[1] - ylim[0]) * 0.1,
+                ylim[1] + (ylim[1] - ylim[0]) * 0.1,
             )
 
     # Turn on the proper x or y axes ticks.
@@ -187,7 +196,7 @@ def plotcorr(X, plotargs=None, full=True, labels=None):
             axes[0, i + 1].xaxis.set_visible(True)
             axes[i, -1].yaxis.set_visible(True)
         for i in range(1, numvars):
-            for j in range(0, i):
+            for j in range(i):
                 fig.delaxes(axes[i, j])
 
     # FIX #2: if numvars is odd, the bottom right corner plot doesn't have the
@@ -214,7 +223,9 @@ def chol(A):
         for j in range(i + 1):
             s = sum(L[i][k] * L[j][k] for k in range(j))
             L[i][j] = (
-                (A[i][i] - s) ** 0.5 if (i == j) else (1.0 / L[j][j] * (A[i][j] - s))
+                (A[i][i] - s) ** 0.5
+                if (i == j)
+                else (1.0 / L[j][j] * (A[i][j] - s))
             )
 
     return np.array(L)

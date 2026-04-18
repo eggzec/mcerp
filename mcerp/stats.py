@@ -3,21 +3,24 @@
 mcerp: Real-time latin-hypercube-sampling-based Monte Carlo Error Propagation
 ===============================================================================
 
-Generalizes many statistical functions that work on numeric objects (from the 
+Generalizes many statistical functions that work on numeric objects (from the
 scipy.stats module) to be compatible with objects defined by statistical
-distributions. 
+distributions.
 
-NOTE: Although all of these functions can be used without this import, this 
+NOTE: Although all of these functions can be used without this import, this
 package was created for convenience and transparent operation. For usage,
-see the respective documentation at 
+see the respective documentation at
 
 http://docs.scipy.org/doc/scipy/reference/stats.html#statistical-functions
 
 Author: Abraham Lee
 Copyright: 2013
 """
-from mcerp import UncertainFunction
+
 import scipy.stats as ss
+
+from mcerp import UncertainFunction
+
 
 __author__ = "Abraham Lee"
 
@@ -25,7 +28,7 @@ __author__ = "Abraham Lee"
 def wrap(func):
     def wrappedfunc(*args, **kwargs):
         """
-        Wraps a Scipy.Stats (or any) function, checking for MCERP objects 
+        Wraps a Scipy.Stats (or any) function, checking for MCERP objects
         as non-keyword arguments
         """
         tmpargs = []
@@ -39,7 +42,7 @@ def wrap(func):
         return func(*args, **kwargs)
 
     wrappedfunc.__name__ = func.__name__
-    wrappedfunc.__doc__ = func.__doc__
+    wrappedfunc.__doc__ = f"Wrapped version of {func.__name__} from scipy.stats for use with UncertainFunction objects."
 
     return wrappedfunc
 
@@ -90,6 +93,6 @@ bartlett = wrap(ss.bartlett)
 levene = wrap(ss.levene)
 shapiro = wrap(ss.shapiro)
 anderson = wrap(ss.anderson)
-binom_test = wrap(ss.binom_test)
+binom_test = wrap(ss.binomtest)
 fligner = wrap(ss.fligner)
 mood = wrap(ss.mood)
