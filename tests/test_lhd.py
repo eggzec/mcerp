@@ -1,8 +1,9 @@
-import pytest
-from ..lhd import ss, lhd
+import scipy.stats as ss
+
+from mcerp.lhd import lhd
 
 
-def test():
+def test_latin_hypercube() -> None:
     # test single distribution
     d0 = ss.uniform(loc=-1, scale=2)  # uniform distribution,low=-1, width=2
     print(lhd(dist=d0, size=5))
@@ -25,19 +26,6 @@ def test():
         showcorrelations=True,
     )
 
-    pytest.importorskip("matplotlib")
-    pytest.importorskip("scatterplot_matrix")
-    try:
-        from scatterplot_matrix import scatterplot_matrix as spm
-        import matplotlib.pyplot as plt
-    except ImportError:
-        print(rand_lhs)
-        print(spac_lhs)
-    else:
-        names = ["U(-1,1)", "N(0,1)", "Beta(2,5)", "Exp(1.5)"]
-        spm(rand_lhs.T, names=names)
-        plt.suptitle("Completely Random LHS Design")
-        plt.show()
-        spm(spac_lhs.T, names=names)
-        plt.suptitle("Space-Filling LHS Design")
-        plt.show()
+    # Basic assertions to verify the output shapes
+    assert rand_lhs.shape == (100, 4)
+    assert spac_lhs.shape == (100, 4)
