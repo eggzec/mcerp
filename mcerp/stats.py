@@ -17,19 +17,26 @@ Author: Abraham Lee
 Copyright: 2013
 """
 
+from collections.abc import Callable
+
 import scipy.stats as ss
 
-from mcerp import UncertainFunction
+from .core import UncertainFunction
 
 
 __author__ = "Abraham Lee"
 
 
-def wrap(func):
-    def wrappedfunc(*args, **kwargs):
+def wrap(func: Callable[..., object]) -> Callable[..., object]:
+    def wrappedfunc(*args: object, **kwargs: object) -> object:
         """
         Wraps a Scipy.Stats (or any) function, checking for MCERP objects
         as non-keyword arguments
+
+        Returns
+        -------
+        object
+            The wrapped function result.
         """
         tmpargs = []
         for arg in args:
@@ -42,7 +49,10 @@ def wrap(func):
         return func(*args, **kwargs)
 
     wrappedfunc.__name__ = func.__name__
-    wrappedfunc.__doc__ = f"Wrapped version of {func.__name__} from scipy.stats for use with UncertainFunction objects."
+    wrappedfunc.__doc__ = (
+        f"Wrapped version of {func.__name__} from scipy.stats for use "
+        "with UncertainFunction objects."
+    )
 
     return wrappedfunc
 

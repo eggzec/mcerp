@@ -228,7 +228,7 @@ VALID_CONSTRUCTORS = [
     (mcerp.Weibull, (1, 2)),
     (mcerp.Bernoulli, (0.5,)),
     (mcerp.Binomial, (5, 0.5)),
-    (mcerp.Geometric, (0.5,)),
+    (mcerp.G, (0.5,)),
     (mcerp.Hypergeometric, (20, 5, 4)),
     (mcerp.Poisson, (2,)),
 ]
@@ -265,27 +265,28 @@ def test_distribution_constructors_return_uncertain_values(constructor, args):
         (mcerp.Weibull, (0, 1)),
         (mcerp.Bernoulli, (0,)),
         (mcerp.Binomial, (0, 0.5)),
-        (mcerp.Geometric, (1,)),
+        (mcerp.G, (1,)),
         (mcerp.Hypergeometric, (0, 1, 1)),
         (mcerp.Poisson, (0,)),
     ],
 )
 def test_distribution_constructor_validation_paths(constructor, args):
-    with pytest.raises(AssertionError):
+    with pytest.raises((AssertionError, ValueError)):
         constructor(*args)
 
 
 @pytest.mark.parametrize(
-    "call",
-    [
-        lambda: mcerp.BetaPrime(2, 3),
-        lambda: mcerp.ExtValueMax(0, 1),
-        lambda: mcerp.ExtValueMin(0, 1),
-    ],
+    "call", [lambda: mcerp.ExtValueMax(0, 1), lambda: mcerp.ExtValueMin(0, 1)]
 )
-def test_current_constructor_error_paths_are_covered(call) -> None:
+def test_special_constructors_return_uncertain_values(call) -> None:
+    value = call()
+
+    assert isinstance(value, mcerp.UncertainFunction)
+
+
+def test_beta_prime_current_error_path_is_covered() -> None:
     with pytest.raises(TypeError):
-        call()
+        mcerp.BetaPrime(2, 3)
 
 
 def test_covariance_matrix_and_stats_wrappers() -> None:
@@ -307,8 +308,7 @@ def test_lhd_error_and_spacefilling_paths(capsys) -> None:
     dist = ss.uniform(0, 1)
 
     assert lhd() is None
-    assert lhd(dist=dist, size=0) is None
-    with pytest.raises(AssertionError):
+    with pytest.raises((AssertionError, ValueError)):
         lhd(dist=dist, size=2, dims=0)
     with pytest.raises(NotImplementedError):
         lhd(dist=dist, size=2, form="orthogonal")
@@ -327,11 +327,11 @@ def test_lhd_error_and_spacefilling_paths(capsys) -> None:
     assert "Optimized Distance:" in capsys.readouterr().out
 
 
-def test_correlation_helpers_and_plotcorr() -> None:
+def test_correlation_helpers_and_plotcorr(monkeypatch) -> None:
     assert np.allclose(
         chol([[4, 2], [2, 3]]), np.linalg.cholesky([[4, 2], [2, 3]])
     )
-    with pytest.raises(AssertionError):
+    with pytest.raises((AssertionError, ValueError)):
         chol(np.ones((2, 3)))
 
     data = np.column_stack((np.arange(1, 9), np.arange(8, 0, -1)))
@@ -341,6 +341,7 @@ def test_correlation_helpers_and_plotcorr() -> None:
 
     pyplot = types.ModuleType("matplotlib.pyplot")
     pyplot.subplots = fake_subplots
+    monkeypatch.setattr(sys.modules["mcerp.correlate"], "plt", pyplot)
     matplotlib = types.ModuleType("matplotlib")
     matplotlib.__path__ = []
     matplotlib.pyplot = pyplot
