@@ -103,6 +103,13 @@ bartlett = wrap(ss.bartlett)
 levene = wrap(ss.levene)
 shapiro = wrap(ss.shapiro)
 anderson = wrap(ss.anderson)
-binom_test = wrap(ss.binomtest)
+_binom_test = getattr(ss, "binomtest", None) or getattr(ss, "binom_test", None)
+if _binom_test is None:
+    raise ImportError(
+        "scipy.stats has no binomtest or binom_test; ",
+        "please install a compatible scipy version",
+    )
+
+binom_test = wrap(_binom_test)
 fligner = wrap(ss.fligner)
 mood = wrap(ss.mood)
