@@ -1,5 +1,5 @@
 site_name: mcerp
-site_description: Second Order Error Propagation for Python
+site_description: Real-time latin-hypercube sampling-based Monte Carlo ERror Propagation for Python
 site_url: https://eggzec.github.io/mcerp
 repo_url: https://github.com/eggzec/mcerp
 repo_name: eggzec/mcerp
@@ -13,6 +13,8 @@ extra:
 
 theme:
   name: material
+  logo: _static/logo.png
+  favicon: _static/favicon.ico
   features:
     - content.code.copy
 
