@@ -25,8 +25,8 @@ functions, similar to those in the standard `math` module, and statistical
 functions like those in the `scipy.stats` module, can also be evaluated 
 directly.
 
-If you are familiar with Excel-based risk analysis programs like *@Risk*, 
-*Crystal Ball*, *ModelRisk*, etc., this package **will work wonders** for you
+If you are familiar with Excel-based risk analysis programs like [*@Risk*](http://lumivero.com/products/at-risk/), 
+[*Crystal Ball*](https://www.oracle.com/applications/crystalball/), [*ModelRisk*](https://www.vosesoftware.com/Risk-In-Excel/), etc., this package **will work wonders** for you
 (and probably even be faster!) and give you more modelling flexibility with 
 the powerful Python language. This package also *doesn't cost a penny*, 
 compared to those commercial packages which cost *thousands of dollars* for a 
