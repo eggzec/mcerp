@@ -1129,7 +1129,7 @@ def _log_normal(
         The sampled uncertain value.
     """
     _validate(sigma > 0, 'Log-Normal "sigma" must be positive')
-    return uv(ss.lognorm(sigma, loc=mu), tag=tag)
+    return uv(ss.lognorm(sigma, scale=mu), tag=tag)
 
 
 def _normal(
