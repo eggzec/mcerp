@@ -5,6 +5,16 @@ title: mcerp
 abstract: >-
   Real-time latin-hypercube-sampling-based Monte Carlo Error Propagation
   for Python.
+authors:
+  - family-names: Lee
+    given-names: Abraham
+    email: tisimst@gmail.com
+  - family-names: Zahir
+    given-names: Saud
+    email: m.saud.zahir@gmail.com
+  - family-names: Ali
+    given-names: M Laraib
+    email: laraibg786@outlook.com
 license: BSD-3-Clause
 repository-code: "https://github.com/eggzec/mcerp"
 url: "https://eggzec.github.io/mcerp/"
