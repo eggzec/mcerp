@@ -463,7 +463,7 @@ class UncertainFunction(_ArithmeticMixin, _ComparisonMixin):
 
     def plot(
         self, *, hist: bool = False, show: bool = False, **kwargs: object
-    ) -> None:
+    ) -> object:
         """
         Plot the distribution of the UncertainFunction. By default, the
         distribution is shown with a kernel density estimate (kde).
@@ -478,8 +478,14 @@ class UncertainFunction(_ArithmeticMixin, _ComparisonMixin):
             required to display the figure.
         kwargs : any valid matplotlib.pyplot.plot or .hist kwarg
 
+        Returns
+        -------
+        matplotlib.axes.Axes
+            The axes object containing the plot.
         """
         plt = _pyplot()
+
+        _fig, ax = plt.subplots()
 
         vals = self._mcpts
         low = min(vals)
@@ -489,21 +495,23 @@ class UncertainFunction(_ArithmeticMixin, _ComparisonMixin):
         xp = np.linspace(low, high, 100)
 
         if hist:
-            h = plt.hist(
+            h = ax.hist(
                 vals,
                 bins=int(np.sqrt(len(vals)) + 0.5),
                 histtype="stepfilled",
                 density=True,
                 **kwargs,
             )
-            plt.ylim(0, 1.1 * h[0].max())
+            ax.set_ylim(0, 1.1 * h[0].max())
         else:
-            plt.plot(xp, p.evaluate(xp), **kwargs)
+            ax.plot(xp, p.evaluate(xp), **kwargs)
 
-        plt.xlim(low - (high - low) * 0.1, high + (high - low) * 0.1)
+        ax.set_xlim(low - (high - low) * 0.1, high + (high - low) * 0.1)
 
         if show:
-            self.show()
+            plt.show()
+
+        return ax
 
     @staticmethod
     def show() -> None:
@@ -752,7 +760,7 @@ class UncertainVariable(UncertainFunction):
 
     def plot(
         self, *, hist: bool = False, show: bool = False, **kwargs: object
-    ) -> None:
+    ) -> object:
         """
         Plot the distribution of the UncertainVariable. Continuous
         distributions are plotted with a line plot and discrete distributions
@@ -768,21 +776,27 @@ class UncertainVariable(UncertainFunction):
             required to display the figure.
         kwargs : any valid matplotlib.pyplot.plot kwarg
 
+        Returns
+        -------
+        matplotlib.axes.Axes
+            The axes object containing the plot.
         """
         plt = _pyplot()
+
+        _fig, ax = plt.subplots()
 
         if hist:
             vals = self._mcpts
             low = vals.min()
             high = vals.max()
-            h = plt.hist(
+            h = ax.hist(
                 vals,
                 bins=int(np.sqrt(len(vals)) + 0.5),
                 histtype="stepfilled",
                 density=True,
                 **kwargs,
             )
-            plt.ylim(0, 1.1 * h[0].max())
+            ax.set_ylim(0, 1.1 * h[0].max())
         else:
             bound = 0.0001
             low = self.rv.ppf(bound)
@@ -791,14 +805,16 @@ class UncertainVariable(UncertainFunction):
                 low = int(low)
                 high = int(high)
                 vals = list(range(low, high + 1))
-                plt.plot(vals, self.rv.pmf(vals), "o", **kwargs)
+                ax.plot(vals, self.rv.pmf(vals), "o", **kwargs)
             else:
                 vals = np.linspace(low, high, 500)
-                plt.plot(vals, self.rv.pdf(vals), **kwargs)
-        plt.xlim(low - (high - low) * 0.1, high + (high - low) * 0.1)
+                ax.plot(vals, self.rv.pdf(vals), **kwargs)
+        ax.set_xlim(low - (high - low) * 0.1, high + (high - low) * 0.1)
 
         if show:
-            self.show()
+            plt.show()
+
+        return ax
 
 
 uv = UncertainVariable  # a nicer form for the user

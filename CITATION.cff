@@ -1,0 +1,16 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+type: software
+title: mcerp
+abstract: >-
+  Real-time latin-hypercube-sampling-based Monte Carlo Error Propagation
+  for Python.
+license: BSD-3-Clause
+repository-code: "https://github.com/eggzec/mcerp"
+url: "https://eggzec.github.io/mcerp/"
+keywords:
+  - monte carlo
+  - error propagation
+  - uncertainty
+  - latin hypercube sampling
+  - statistics
