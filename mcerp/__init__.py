@@ -71,7 +71,7 @@ from .correlate import chol, correlate, induce_correlations, plotcorr
 
 __author__ = "Abraham Lee"
 
-try:  # noqa RUF067
+try:  # ruff: ignore[non-empty-init-module] RUF067
     __version__ = version("mcerp")
 except PackageNotFoundError:
     __version__ = "unknown"
