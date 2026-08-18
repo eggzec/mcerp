@@ -1,4 +1,6 @@
-# `mcerp`
+![MCERP](assets/mcerp-banner.png)
+
+# MCERP
 
 ![MCERP](./_static/logo.png)
 

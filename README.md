@@ -1,4 +1,6 @@
-# mcerp
+![MCERP](docs/assets/mcerp-banner.png)
+
+# MCERP
 
 **Real-time latin-hypercube sampling-based Monte Carlo ERror Propagation for Python**
 
