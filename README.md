@@ -1,4 +1,4 @@
-![MCERP](docs/assets/mcerp-banner.png)
+![MCERP](https://raw.githubusercontent.com/eggzec/mcerp/master/docs/assets/mcerp-banner.png)
 
 # MCERP
 
