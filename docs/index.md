@@ -1,8 +1,8 @@
-![MCERP](assets/mcerp-banner.png)
+![MCERP](https://raw.githubusercontent.com/eggzec/mcerp/master/docs/assets/mcerp-banner.png)
 
 # MCERP
 
-![MCERP](./_static/logo.png)
+![MCERP](https://raw.githubusercontent.com/eggzec/mcerp/master/docs/assets/mcerp-icon.svg){ width="120" }
 
 **Real-time latin-hypercube-sampling-based Monte Carlo error propagation for
 Python.**
